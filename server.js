@@ -3,15 +3,21 @@ const express = require('express')
 let db
 
 const app = express()
+app.set('view engine', 'ejs')
+app.set('views', './views')
 
 app.get('/', async (req, res) => {
   const allAnimals = await db.collection('animals').find().toArray()
-  console.log(allAnimals)
-  res.send('Welcome to the homepage')
+  res.render('home', { allAnimals })
 })
 
 app.get('/admin', (req, res) => {
   res.send('Admin page')
+})
+
+app.get('/api/animals', async (req, res) => {
+  const allAnimals = await db.collection('animals').find().toArray()
+  res.json(allAnimals)
 })
 
 async function start() {
